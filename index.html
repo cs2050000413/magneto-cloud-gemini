@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Magneto</title>
+    <!-- Tailwind CSS Play CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Use system fonts to optimize loading speed in Mainland China -->
     <style>
       body {
-        font-family: 'Nunito', sans-serif;
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
         background-color: #f0f4f8;
       }
       /* Hide scrollbar for cleaner mobile look */
@@ -52,18 +53,52 @@
         opacity: 0; /* Start hidden */
       }
     </style>
-  <script type="importmap">
+
+    <!-- BootCDN for FontAwesome (Fast in China) -->
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Polyfill process.env for local execution -->
+    <script>
+      window.process = {
+        env: {
+          NODE_ENV: 'development',
+          API_KEY: '' // Note: API calls will fail locally without a valid key or proxy
+        }
+      };
+    </script>
+
+    <!-- Import Map using global ESM CDNs -->
+    <script type="importmap">
 {
   "imports": {
+    "react": "https://esm.sh/react@18.3.1?dev",
+    "react-dom/client": "https://esm.sh/react-dom@18.3.1/client?dev",
+    "react-dom": "https://esm.sh/react-dom@18.3.1?dev",
+    "@google/genai": "https://esm.sh/@google/genai@0.1.2",
     "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "react": "https://aistudiocdn.com/react@^19.2.0"
+    "react/": "https://aistudiocdn.com/react@^19.2.0/"
   }
 }
 </script>
-</head>
+  </head>
   <body>
     <div id="root"></div>
+    <!-- Error trap for white screen debugging -->
+    <script>
+      window.onerror = function(message, source, lineno, colno, error) {
+        const root = document.getElementById('root');
+        if (root && (!root.innerHTML || root.innerHTML === '')) {
+           // Only show if root is empty (React failed to mount)
+           console.error("App Load Error:", error);
+           root.innerHTML = '<div style="padding:20px; color: #ef4444; font-family: sans-serif; text-align: center; margin-top: 50px;">' + 
+             '<i class="fas fa-exclamation-triangle" style="font-size: 48px; margin-bottom: 20px;"></i>' +
+             '<h3 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 10px;">启动加载失败</h3>' + 
+             '<p style="color: #374151;">请检查网络连接或控制台报错信息。</p>' + 
+             '<div style="margin-top: 20px; padding: 10px; background: #fee2e2; border-radius: 8px; font-size:12px; color: #991b1b; word-break: break-all;">' + message + '</div>' +
+             '</div>';
+        }
+      };
+    </script>
+    <script type="module" src="./index.tsx"></script>
   </body>
 </html>
