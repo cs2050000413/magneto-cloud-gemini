@@ -1,0 +1,7 @@
+{
+  "name": "Magneto - Digital Magnet Collector",
+  "description": "A digital companion for hand-painted refrigerator magnets. Scan, collect, and discover the stories behind your art.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
